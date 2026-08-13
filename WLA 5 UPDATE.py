@@ -189,6 +189,17 @@ def generate_pdf_report(
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(135, 6, "TOTAL BIAYA LEMBUR LINI PER SHIFT", 1, 0, "R")
     pdf.cell(55, 6, f"Rp {biaya_lembur:,.0f}", 1, 1, "R")
+
+  pdf.ln(10)
+  pdf.set_font("Helvetica", "I", 8)
+  pdf.cell(
+      0,
+      5,
+      "* Laporan ini digenerate secara otomatis oleh Sistem Pendukung Keputusan"
+      " Berbasis Streamlit.",
+      0,
+      1,
+      "R",
   )
 
   return bytes(pdf.output())
@@ -319,9 +330,9 @@ df_input["Fatigue_Risk"] = df_input["Percent_WLA"].apply(indikator_fatigue)
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📋 Page 1: Data Time Study",
     "📊 Page 2: Visualisasi Beban Kerja",
-    "🔄 Page 3: DSS Redistribusi Beban Kerja",
+    "🔄 Page 3: DSS Redistribusi Interaktif",
     "⚖️ Page 4: Analisis Kebutuhan Staff",
-    "📝 Page 5: Rekomendasi Akhir",
+    "🎯 Page 5: Rekomendasi Akhir DSS",
 ])
 
 # ------------------------------------------
@@ -761,9 +772,9 @@ with tab5:
     )
 
     st.download_button(
-        label="📄 Download Laporan Resmi (PDF .pdf)",
+        label="📄 Download Hasil Analisis (.pdf)",
         data=pdf_bytes,
-        file_name="Laporan_DSS_Analisis_Beban_Kerja.pdf",
+        file_name="Report_Analisis Beban Kerja WLA.pdf",
         mime="application/pdf",
         use_container_width=True,
     )
