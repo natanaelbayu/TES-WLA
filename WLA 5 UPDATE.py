@@ -189,17 +189,6 @@ def generate_pdf_report(
     pdf.set_font("Helvetica", "B", 8)
     pdf.cell(135, 6, "TOTAL BIAYA LEMBUR LINI PER SHIFT", 1, 0, "R")
     pdf.cell(55, 6, f"Rp {biaya_lembur:,.0f}", 1, 1, "R")
-
-  pdf.ln(10)
-  pdf.set_font("Helvetica", "I", 8)
-  pdf.cell(
-      0,
-      5,
-      "* Laporan ini digenerate secara otomatis oleh Sistem Pendukung Keputusan"
-      " Berbasis Streamlit.",
-      0,
-      1,
-      "R",
   )
 
   return bytes(pdf.output())
