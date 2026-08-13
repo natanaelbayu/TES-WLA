@@ -195,8 +195,7 @@ def generate_pdf_report(
   pdf.cell(
       0,
       5,
-      "* Laporan ini digenerate secara otomatis oleh Sistem Pendukung Keputusan"
-      " Berbasis Streamlit.",
+      "* Tim 2 ELITE Universitas Gunadarma",
       0,
       1,
       "R",
