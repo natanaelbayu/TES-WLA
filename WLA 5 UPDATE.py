@@ -9,7 +9,7 @@ from fpdf import FPDF
 # 1. KONFIGURASI HALAMAN STREAMLIT
 # ==========================================
 st.set_page_config(
-    page_title="DSS Analisis Beban Kerja Operator Lini",
+    page_title="Analisis Beban Kerja Operator Menggunakan Workload Analysis",
     page_icon="📊",
     layout="wide",
 )
@@ -49,7 +49,7 @@ def generate_pdf_report(
   pdf.cell(
       0,
       8,
-      "LAPORAN HASIL SISTEM PENDUKUNG KEPUTUSAN (DSS)",
+      "LAPORAN HASIL SISTEM PENDUKUNG KEPUTUSAN ",
       ln=True,
       align="C",
   )
@@ -87,9 +87,9 @@ def generate_pdf_report(
   )
   pdf.ln(4)
 
-  # 3. RINGKASAN REKOMENDASI STRATEGIS (DSS)
+  # 3. RINGKASAN REKOMENDASI STRATEGIS 
   pdf.set_font("Helvetica", "B", 10)
-  pdf.cell(0, 6, "B. HASIL REKOMENDASI DSS & STRATEGI ALOKASI", ln=True)
+  pdf.cell(0, 6, "B. HASIL REKOMENDASI & STRATEGI ALOKASI", ln=True)
   pdf.set_font("Helvetica", "", 9)
 
   pdf.set_fill_color(240, 240, 240)
@@ -416,7 +416,7 @@ with tab2:
     )
 
 # ------------------------------------------
-# PAGE 3: DSS INTERAKTIF (REDISTRIBUSI DINAMIS)
+# PAGE 3:    INTERAKTIF (REDISTRIBUSI DINAMIS)
 # ------------------------------------------
 with tab3:
   st.subheader("🔄 Interactive Decision Support System: Simulasi Redistribusi")
@@ -515,12 +515,12 @@ with tab3:
         " (Tidak ada operator Overload)."
     )
 
-  st.markdown("### 📊 Perbandingan % WLA Eksisting vs Hasil Simulasi DSS")
+  st.markdown("### 📊 Perbandingan % WLA Eksisting vs Hasil Simulasi")
 
   df_compare = pd.DataFrame({
       "Operator": df_input["Operator"],
       "Eksisting (% WLA)": df_input["Percent_WLA"],
-      "Hasil Redistribusi DSS (% WLA)": st.session_state.df_simulasi[
+      "Hasil Redistribusi (% WLA)": st.session_state.df_simulasi[
           "Percent_WLA"
       ],
   }).melt(id_vars="Operator", var_name="Kondisi", value_name="Percent_WLA")
@@ -589,10 +589,10 @@ with tab4:
   col_e2.metric("Sisa Operator Underload", f"{sisa_underload} Orang")
 
 # ------------------------------------------
-# PAGE 5: REKOMENDASI DSS, BIAYA, & EXPORT PDF/EXCEL
+# PAGE 5: REKOMENDASI WLA, BIAYA, & EXPORT PDF/EXCEL
 # ------------------------------------------
 with tab5:
-  st.subheader("🎯 Rekomendasi Strategis Pengambilan Keputusan (DSS)")
+  st.subheader("🎯 Rekomendasi Strategis Pengambilan Keputusan")
 
   df_final = st.session_state.df_simulasi.copy()
   sisa_over = len(df_final[df_final["Kategori_WLA"] == "Overload"])
@@ -712,7 +712,7 @@ with tab5:
       df_final.to_excel(writer, sheet_name="Simulasi_WLA_Final", index=False)
       df_summary_report = pd.DataFrame({
           "Parameter_Evaluasi": [
-              "Status Rekomendasi DSS",
+              "Status Rekomendasi",
               "Total Operator Eksisting",
               "Kebutuhan Operator Optimal",
               "Tarif Lembur per Jam (Rp)",
@@ -731,9 +731,9 @@ with tab5:
       )
 
     st.download_button(
-        label="📥 Download Laporan (Excel .xlsx)",
+        label="📥 Download Hasil Analisis (.xlsx)",
         data=buffer.getvalue(),
-        file_name="Laporan_DSS_Analisis_Beban_Kerja.xlsx",
+        file_name="Report_Analisis Beban Kerja WLA.xlsx",
         mime=(
             "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
         ),
