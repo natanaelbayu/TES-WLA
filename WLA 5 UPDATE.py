@@ -329,9 +329,9 @@ df_input["Fatigue_Risk"] = df_input["Percent_WLA"].apply(indikator_fatigue)
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📋 Page 1: Data Time Study",
     "📊 Page 2: Visualisasi Beban Kerja",
-    "🔄 Page 3: DSS Redistribusi Interaktif",
+    "🔄 Page 3: Redistribusi Interaktif",
     "⚖️ Page 4: Analisis Kebutuhan Staff",
-    "🎯 Page 5: Rekomendasi Akhir DSS",
+    "🎯 Page 5: Rekomendasi Akhir",
 ])
 
 # ------------------------------------------
@@ -608,9 +608,9 @@ with tab5:
   total_biaya_lembur = 0
 
   if sisa_over == 0 and sisa_under == 0:
-    status_rekomendasi = "REKOMENDASI 1: CUKUP LAKUKAN REDISTRIBUSI TUGAS"
+    status_rekomendasi = "REKOMENDASI : CUKUP LAKUKAN REDISTRIBUSI TUGAS"
     st.success(
-        "✅ **REKOMENDASI 1: CUKUP LAKUKAN REDISTRIBUSI (TANPA REKRUTMEN /"
+        "✅ **REKOMENDASI : CUKUP LAKUKAN REDISTRIBUSI (TANPA REKRUTMEN /"
         " LEMBUR)**"
     )
     st.write("""
@@ -621,11 +621,11 @@ with tab5:
 
   elif sisa_over > 0 and selisih_staff > 0:
     status_rekomendasi = (
-        f"REKOMENDASI 2: PENAMBAHAN {selisih_staff} STAFF ATAU SKEMA LEMBUR"
+        f"REKOMENDASI : PENAMBAHAN {selisih_staff} STAFF ATAU SKEMA LEMBUR"
     )
     st.error(
-        f"⚠️ **REKOMENDASI 2: PERLU PENAMBAHAN TENAGA KERJA ({selisih_staff}"
-        " ORANG) ATAU SKEMA LEMBUR**"
+        f"⚠️ **REKOMENDASI : PERLU PENAMBAHAN TENAGA KERJA ({selisih_staff}"
+        " ORANG) ATAU PERLU ADANYA LEMBUR (OVERTIME)**"
     )
     st.write(f"""
         * **Keputusan:** Meskipun telah dilakukan redistribusi pada Page 3, masih terdapat operator yang mengalami *Overload* karena total beban kerja lini melampaui jam kerja efektif.
@@ -675,18 +675,18 @@ with tab5:
 
   elif selisih_staff < 0:
     status_rekomendasi = (
-        f"REKOMENDASI 3: EFISIENSI OPERATOR ({abs(selisih_staff)} ORANG"
+        f"REKOMENDASI : EFISIENSI OPERATOR ({abs(selisih_staff)} ORANG"
         " OVERSTAFFED)"
     )
-    st.warning(f"⚠️ **REKOMENDASI 3: EFISIENSI OPERATOR (OVERSTAFFED)**")
+    st.warning(f"⚠️ **REKOMENDASI : EFISIENSI OPERATOR (OVERSTAFFED)**")
     st.write(
         f"Direkomendasikan memindahkan **{abs(selisih_staff)} orang operator**"
         " ke lini produksi lain yang membutuhkan."
     )
 
   else:
-    status_rekomendasi = "REKOMENDASI 4: OPTIMALKAN KEMBALI REDISTRIBUSI ATOMIK"
-    st.info("💡 **REKOMENDASI 4: OPTIMALKAN KEMBALI REDISTRIBUSI ATOMIK**")
+    status_rekomendasi = "REKOMENDASI : OPTIMALKAN KEMBALI REDISTRIBUSI "
+    st.info("💡 **REKOMENDASI : OPTIMALKAN KEMBALI REDISTRIBUSI **")
     st.write(
         "Kapasitas total jam kerja sebenarnya mencukupi. Cobalah kembali ke"
         " **Page 3** untuk menggeser alokasi waktu ke operator yang masih"
@@ -697,9 +697,9 @@ with tab5:
   # FITUR EXPORT LAPORAN (PDF & EXCEL)
   # ==========================================
   st.markdown("---")
-  st.markdown("### 📥 Export Laporan Hasil Rekomendasi DSS")
+  st.markdown("### 📥 Export Laporan Hasil Rekomendasi")
   st.write(
-      "Unduh laporan resmi ringkasan analisis beban kerja, hasil simulasi,"
+      "Unduh laporan ringkasan analisis beban kerja, hasil simulasi,"
       " dan estimasi keputusan dalam format **PDF** atau **Excel**."
   )
 
