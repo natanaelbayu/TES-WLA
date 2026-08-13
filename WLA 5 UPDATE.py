@@ -620,11 +620,11 @@ with tab5:
         f"⚠️ **REKOMENDASI 2: PERLU PENAMBAHAN TENAGA KERJA ({selisih_staff}"
         " ORANG) ATAU SKEMA LEMBUR**"
     )
-    st.writef"""
+    st.write(f"""
         * **Keputusan:** Meskipun telah dilakukan redistribusi pada Page 3, masih terdapat operator yang mengalami *Overload* karena total beban kerja lini melampaui jam kerja efektif.
         * **Tindakan Jangka Panjang:** Rekrut **{selisih_staff} orang operator baru** untuk menyeimbangkan kapasitas lini secara permanen.
         * **Tindakan Jangka Pendek:** Berlakukan skema **jam kerja lembur (*overtime*)** dengan estimasi biaya di bawah ini:
-        """
+        """)
 
     st.markdown(
         "### ⏱️ Rincian Kebutuhan Jam Lembur & Estimasi Biaya (per Shift)"
