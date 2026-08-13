@@ -15,23 +15,23 @@ st.set_page_config(
 )
 
 # ==========================================
-# CUSTOM CSS UNTUK TAMPILAN COLORFUL & MODERN
+# CUSTOM CSS DENGAN PALET WARNA GAMBAR (#200017, #561D47, #AD6B98, #EAA8BA, #FAF2EB)
 # ==========================================
 st.markdown("""
     <style>
-    /* 1. Background Aplikasi Keseluruhan */
+    /* 1. Background Aplikasi Keseluruhan (#FAF2EB) */
     .stApp {
-        background-color: #F8FAFC;
+        background-color: #FAF2EB;
     }
     
-    /* 2. Style Header Utama (Title Banner) */
+    /* 2. Banner Header Utama dengan Gradient Deep Plum (#200017 ke #561D47) */
     .main-header {
-        background: linear-gradient(135deg, #1E3A8A 0%, #3B82F6 50%, #6366F1 100%);
+        background: linear-gradient(135deg, #200017 0%, #561D47 50%, #AD6B98 100%);
         padding: 24px;
         border-radius: 16px;
         color: white;
         text-align: center;
-        box-shadow: 0 10px 15px -3px rgba(30, 58, 138, 0.3);
+        box-shadow: 0 10px 20px -5px rgba(32, 0, 23, 0.4);
         margin-bottom: 20px;
     }
     .main-header h2 {
@@ -40,46 +40,45 @@ st.markdown("""
         margin-bottom: 8px;
     }
     .main-header p {
-        color: #E0E7FF !important;
+        color: #EAA8BA !important;
         font-size: 1.05rem;
         margin-bottom: 0px;
     }
     
     /* 3. Style Sidebar */
     [data-testid="stSidebar"] {
-        background: linear-gradient(180deg, #F1F5F9 0%, #E2E8F0 100%);
-        border-right: 2px solid #CBD5E1;
+        background-color: #F3E8EE;
+        border-right: 2px solid #EAA8BA;
     }
     
-    /* 4. Style Custom Metric Card (Colorful Cards) */
-    .metric-card-blue {
-        background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+    /* 4. Metric Cards Colorful dari Palet */
+    .metric-card-plum {
+        background: linear-gradient(135deg, #561D47 0%, #200017 100%);
         padding: 18px;
-        border-radius: 12px;
-        color: white;
+        border-radius: 14px;
+        color: #FAF2EB;
         text-align: center;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(86, 29, 71, 0.25);
     }
-    .metric-card-indigo {
-        background: linear-gradient(135deg, #6366F1 0%, #4338CA 100%);
+    .metric-card-dusty {
+        background: linear-gradient(135deg, #AD6B98 0%, #561D47 100%);
         padding: 18px;
-        border-radius: 12px;
+        border-radius: 14px;
         color: white;
         text-align: center;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(173, 107, 152, 0.25);
     }
-    .metric-card-cyan {
-        background: linear-gradient(135deg, #06B6D4 0%, #0E7490 100%);
+    .metric-card-pink {
+        background: linear-gradient(135deg, #EAA8BA 0%, #AD6B98 100%);
         padding: 18px;
-        border-radius: 12px;
-        color: white;
+        border-radius: 14px;
+        color: #200017;
         text-align: center;
-        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 10px rgba(234, 168, 186, 0.3);
     }
     .metric-title {
         font-size: 0.9rem;
-        font-weight: 600;
-        opacity: 0.9;
+        font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 0.5px;
     }
@@ -89,21 +88,23 @@ st.markdown("""
         margin-top: 4px;
     }
 
-    /* 5. Custom Styling untuk Tab Header */
+    /* 5. Styling Tab Header */
     button[data-baseweb="tab"] {
         font-weight: 700 !important;
-        border-radius: 8px !important;
+        border-radius: 10px !important;
         padding: 8px 16px !important;
         margin-right: 4px !important;
+        color: #561D47 !important;
     }
     button[aria-selected="true"] {
-        background-color: #3B82F6 !important;
-        color: white !important;
+        background-color: #561D47 !important;
+        color: #FAF2EB !important;
+        box-shadow: 0 4px 8px rgba(86, 29, 71, 0.3);
     }
     </style>
 """, unsafe_allow_html=True)
 
-# BANNER HEADER COLORFUL
+# BANNER HEADER ESTETIK
 st.markdown("""
     <div class="main-header">
         <h2>Sistem Pendukung Keputusan Analisis Beban Kerja & Optimasi Tenaga Kerja</h2>
@@ -439,11 +440,11 @@ with tab1:
   st.markdown("<br>", unsafe_allow_html=True)
   col_a, col_b, col_c = st.columns(3)
 
-  # Custom Colorful Metric Cards
+  # Metric Cards dari Warna Palet
   with col_a:
     st.markdown(
         f"""
-        <div class="metric-card-blue">
+        <div class="metric-card-plum">
             <div class="metric-title">Total Operator Lini</div>
             <div class="metric-value">{len(df_input)} Orang</div>
         </div>
@@ -454,7 +455,7 @@ with tab1:
   with col_b:
     st.markdown(
         f"""
-        <div class="metric-card-indigo">
+        <div class="metric-card-dusty">
             <div class="metric-title">Rata-rata % WLA Lini</div>
             <div class="metric-value">{df_input['Percent_WLA'].mean():.2f}%</div>
         </div>
@@ -465,7 +466,7 @@ with tab1:
   with col_c:
     st.markdown(
         f"""
-        <div class="metric-card-cyan">
+        <div class="metric-card-pink">
             <div class="metric-title">Total Waktu Baku Diperlukan</div>
             <div class="metric-value">{df_input['Total_Waktu_Kerja_Menit'].sum():.2f} Menit</div>
         </div>
@@ -479,9 +480,9 @@ with tab1:
 with tab2:
   st.subheader("📊 Visualisasi Beban Kerja & Risiko Ergonomi (Eksisting)")
   color_map = {
-      "Underload": "#FBBF24",
-      "Normal": "#10B981",
-      "Overload": "#EF4444",
+      "Underload": "#EAA8BA",
+      "Normal": "#AD6B98",
+      "Overload": "#561D47",
   }
 
   fig_bar = px.bar(
@@ -496,16 +497,20 @@ with tab2:
   fig_bar.add_hline(
       y=threshold_underload,
       line_dash="dash",
-      line_color="orange",
+      line_color="#AD6B98",
       annotation_text="Batas Underload",
   )
   fig_bar.add_hline(
       y=threshold_overload,
       line_dash="dash",
-      line_color="red",
+      line_color="#561D47",
       annotation_text="Batas Overload",
   )
-  fig_bar.update_layout(yaxis_title="% WLA", xaxis_title="Operator")
+  fig_bar.update_layout(
+      yaxis_title="% WLA",
+      xaxis_title="Operator",
+      plot_bgcolor="rgba(0,0,0,0)",
+  )
   st.plotly_chart(fig_bar, use_container_width=True)
 
   col_pie1, col_pie2 = st.columns(2)
@@ -638,11 +643,17 @@ with tab3:
       ],
   }).melt(id_vars="Operator", var_name="Kondisi", value_name="Percent_WLA")
 
+  color_compare = {
+      "Eksisting (% WLA)": "#AD6B98",
+      "Hasil Redistribusi (% WLA)": "#561D47",
+  }
+
   fig_sim = px.bar(
       df_compare,
       x="Operator",
       y="Percent_WLA",
       color="Kondisi",
+      color_discrete_map=color_compare,
       barmode="group",
       text=df_compare["Percent_WLA"].apply(lambda x: f"{x:.1f}%"),
       title="Dampak Simulasi Redistribusi Elemen Kerja Terhadap Beban Kerja Lini",
@@ -650,15 +661,16 @@ with tab3:
   fig_sim.add_hline(
       y=threshold_underload,
       line_dash="dash",
-      line_color="orange",
+      line_color="#EAA8BA",
       annotation_text="Batas Underload",
   )
   fig_sim.add_hline(
       y=threshold_overload,
       line_dash="dash",
-      line_color="red",
+      line_color="#200017",
       annotation_text="Batas Overload",
   )
+  fig_sim.update_layout(plot_bgcolor="rgba(0,0,0,0)")
   st.plotly_chart(fig_sim, use_container_width=True)
 
 # ------------------------------------------
@@ -684,7 +696,7 @@ with tab4:
   with col1:
     st.markdown(
         f"""
-        <div class="metric-card-blue">
+        <div class="metric-card-plum">
             <div class="metric-title">Operator Eksisting Lini</div>
             <div class="metric-value">{staff_eksisting} Orang</div>
         </div>
@@ -695,7 +707,7 @@ with tab4:
   with col2:
     st.markdown(
         f"""
-        <div class="metric-card-indigo">
+        <div class="metric-card-dusty">
             <div class="metric-title">Kebutuhan Operator (Teoritis)</div>
             <div class="metric-value">{staff_teoritis:.2f} Orang</div>
         </div>
@@ -706,7 +718,7 @@ with tab4:
   with col3:
     st.markdown(
         f"""
-        <div class="metric-card-cyan">
+        <div class="metric-card-pink">
             <div class="metric-title">Kebutuhan Operator Optimal</div>
             <div class="metric-value">{staff_optimal} Orang</div>
         </div>
