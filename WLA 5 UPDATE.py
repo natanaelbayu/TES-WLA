@@ -731,7 +731,7 @@ with tab5:
       )
 
     st.download_button(
-        label="📥 Download Hasil Analisis (EXCEL)",
+        label="📥 Download Hasil Analisis (Excel)",
         data=buffer.getvalue(),
         file_name="Report_Analisis Beban Kerja WLA.xlsx",
         mime=(
