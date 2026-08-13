@@ -330,9 +330,9 @@ df_input["Fatigue_Risk"] = df_input["Percent_WLA"].apply(indikator_fatigue)
 tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "📋 Page 1: Data Time Study",
     "📊 Page 2: Visualisasi Beban Kerja",
-    "🔄 Page 3: DSS Redistribusi Interaktif",
+    "🔄 Page 3: DSS Redistribusi Beban Kerja",
     "⚖️ Page 4: Analisis Kebutuhan Staff",
-    "🎯 Page 5: Rekomendasi Akhir DSS",
+    "📝 Page 5: Rekomendasi Akhir",
 ])
 
 # ------------------------------------------
