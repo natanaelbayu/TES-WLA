@@ -27,68 +27,172 @@ st.caption(
 
 
 # ==========================================
-# 2. FUNGSI GENERATOR LAPORAN PDF (FPDF2)
+# 2. FUNGSI GENERATOR LAPORAN PDF LENGKAP & RAPI
 # ==========================================
 def generate_pdf_report(
-    status_rek, staff_eksis, staff_opt, biaya_lembur, df_final
+    status_rek,
+    staff_eksis,
+    staff_opt,
+    biaya_lembur,
+    df_final,
+    jam_shift,
+    waktu_ist,
+    jam_efektif,
+    df_lembur_data,
 ):
-  pdf = FPDF()
+  pdf = FPDF(orientation="P", unit="mm", format="A4")
+  pdf.set_auto_page_break(auto=True, margin=15)
   pdf.add_page()
 
-  # Header Laporan
+  # 1. HEADER DOKUMEN
   pdf.set_font("Helvetica", "B", 14)
   pdf.cell(
-      190, 10, "LAPORAN REKOMENDASI DSS - ANALISIS BEBAN KERJA", ln=True, align="C"
-  )
-  pdf.set_font("Helvetica", "", 10)
-  pdf.cell(
-      190,
+      0,
       8,
-      "Sistem Pendukung Keputusan Berbasis WLA & Time Study",
+      "LAPORAN HASIL SISTEM PENDUKUNG KEPUTUSAN (DSS)",
       ln=True,
       align="C",
   )
-  pdf.ln(5)
-
-  # Ringkasan Keputusan
   pdf.set_font("Helvetica", "B", 11)
-  pdf.cell(190, 8, "1. RINGKASAN REKOMENDASI STRATEGIS", ln=True)
-  pdf.set_font("Helvetica", "", 10)
-  pdf.multi_cell(190, 6, f"Status Rekomendasi : {status_rek}")
   pdf.cell(
-      190, 6, f"Jumlah Operator Eksisting : {staff_eksis} Orang", ln=True
-  )
-  pdf.cell(190, 6, f"Kebutuhan Operator Optimal : {staff_opt} Orang", ln=True)
-  pdf.cell(
-      190,
+      0,
       6,
-      f"Estimasi Biaya Lembur Lini : Rp {biaya_lembur:,.0f} / shift",
+      "ANALISIS BEBAN KERJA & OPTIMASI TENAGA KERJA (WLA)",
+      ln=True,
+      align="C",
+  )
+  pdf.set_font("Helvetica", "I", 9)
+  pdf.cell(
+      0,
+      5,
+      "Metode: Time Study & Workload Analysis - Single Line Production",
+      ln=True,
+      align="C",
+  )
+  pdf.set_line_width(0.5)
+  pdf.line(10, 32, 200, 32)
+  pdf.ln(8)
+
+  # 2. PARAMETER OPERASIONAL & INPUT
+  pdf.set_font("Helvetica", "B", 10)
+  pdf.cell(0, 6, "A. PARAMETER OPERASIONAL LINI", ln=True)
+  pdf.set_font("Helvetica", "", 9)
+  pdf.cell(95, 5, f"• Jam Kerja Per Shift : {jam_shift} Jam", ln=False)
+  pdf.cell(95, 5, f"• Waktu Istirahat : {waktu_ist} Menit", ln=True)
+  pdf.cell(
+      95,
+      5,
+      f"• Jam Kerja Efektif Tersedia : {jam_efektif:.1f} Menit/Shift",
       ln=True,
   )
-  pdf.ln(6)
+  pdf.ln(4)
 
-  # Tabel Ringkasan Operator
-  pdf.set_font("Helvetica", "B", 11)
-  pdf.cell(
-      190, 8, "2. DETAIL BEBAN KERJA OPERATOR (PASCA SIMULASI)", ln=True
-  )
-  pdf.set_font("Helvetica", "B", 9)
-
-  # Header Tabel
-  pdf.cell(45, 8, "Operator", 1)
-  pdf.cell(45, 8, "Total Waktu (Min)", 1)
-  pdf.cell(45, 8, "% WLA", 1)
-  pdf.cell(55, 8, "Status WLA", 1)
-  pdf.ln()
-
-  # Isi Tabel
+  # 3. RINGKASAN REKOMENDASI STRATEGIS (DSS)
+  pdf.set_font("Helvetica", "B", 10)
+  pdf.cell(0, 6, "B. HASIL REKOMENDASI DSS & STRATEGI ALOKASI", ln=True)
   pdf.set_font("Helvetica", "", 9)
-  for index, row in df_final.iterrows():
-    pdf.cell(45, 8, str(row["Operator"]), 1)
-    pdf.cell(45, 8, f"{row['Total_Waktu_Kerja_Menit']:.1f}", 1)
-    pdf.cell(45, 8, f"{row['Percent_WLA']:.1f}%", 1)
-    pdf.cell(55, 8, str(row["Kategori_WLA"]), 1)
-    pdf.ln()
+
+  pdf.set_fill_color(240, 240, 240)
+  pdf.multi_cell(
+      0, 6, f"STATUS REKOMENDASI: {status_rek}", border=1, align="L", fill=True
+  )
+  pdf.ln(2)
+
+  pdf.cell(95, 5, f"• Total Operator Eksisting : {staff_eksis} Orang", ln=False)
+  pdf.cell(
+      95, 5, f"• Kebutuhan Operator Optimal : {staff_opt} Orang", ln=True
+  )
+
+  selisih = staff_opt - staff_eksis
+  if selisih > 0:
+    pdf.cell(
+        95,
+        5,
+        f"• Kekurangan Tenaga Kerja : {selisih} Orang (Understaffed)",
+        ln=True,
+    )
+  elif selisih < 0:
+    pdf.cell(
+        95,
+        5,
+        f"• Kelebihan Tenaga Kerja : {abs(selisih)} Orang (Overstaffed)",
+        ln=True,
+    )
+  else:
+    pdf.cell(
+        95,
+        5,
+        "• Status Kapasitas Lini : Cukup / Optimal (Balanced)",
+        ln=True,
+    )
+  pdf.ln(4)
+
+  # 4. DETAIL BEBAN KERJA & RISIKO ERGONOMIS
+  pdf.set_font("Helvetica", "B", 10)
+  pdf.cell(
+      0,
+      6,
+      "C. DETAIL BEBAN KERJA & RISIKO ERGONOMI OPERATOR (PASCA SIMULASI)",
+      ln=True,
+  )
+  pdf.set_font("Helvetica", "B", 8)
+
+  # Header Tabel Detail (Total Lebar = 190mm)
+  pdf.cell(30, 7, "Operator", 1, 0, "C")
+  pdf.cell(35, 7, "Total Waktu (Min)", 1, 0, "C")
+  pdf.cell(30, 7, "% WLA", 1, 0, "C")
+  pdf.cell(35, 7, "Kategori WLA", 1, 0, "C")
+  pdf.cell(60, 7, "Risiko Fatigue (Ergonomi)", 1, 1, "C")
+
+  pdf.set_font("Helvetica", "", 8)
+  for idx, row in df_final.iterrows():
+    pdf.cell(30, 6, str(row["Operator"]), 1, 0, "C")
+    pdf.cell(35, 6, f"{row['Total_Waktu_Kerja_Menit']:.1f}", 1, 0, "C")
+    pdf.cell(30, 6, f"{row['Percent_WLA']:.1f}%", 1, 0, "C")
+    pdf.cell(35, 6, str(row["Kategori_WLA"]), 1, 0, "C")
+    pdf.cell(60, 6, str(row["Fatigue_Risk"]), 1, 1, "L")
+
+  pdf.ln(4)
+
+  # 5. ESTIMASI BIAYA & SKEMA LEMBUR (JIKA ADA OVERLOAD)
+  if not df_lembur_data.empty:
+    pdf.set_font("Helvetica", "B", 10)
+    pdf.cell(
+        0,
+        6,
+        "D. RINCIAN ESTIMASI JAM LEMBUR & BIAYA FINANSIAL (ALTERNATIF TAKTIS)",
+        ln=True,
+    )
+    pdf.set_font("Helvetica", "B", 8)
+
+    # Header Tabel Lembur (Total Lebar = 190mm)
+    pdf.cell(45, 7, "Operator Overload", 1, 0, "C")
+    pdf.cell(45, 7, "Kelebihan Menit", 1, 0, "C")
+    pdf.cell(45, 7, "Jam Lembur (Jam)", 1, 0, "C")
+    pdf.cell(55, 7, "Estimasi Biaya (Rp)", 1, 1, "C")
+
+    pdf.set_font("Helvetica", "", 8)
+    for idx, row in df_lembur_data.iterrows():
+      pdf.cell(45, 6, str(row["Operator"]), 1, 0, "C")
+      pdf.cell(45, 6, f"{row['Kelebihan_Menit']:.1f} Menit", 1, 0, "C")
+      pdf.cell(45, 6, f"{row['Kebutuhan_Lembur_Jam']:.2f} Jam", 1, 0, "C")
+      pdf.cell(55, 6, f"Rp {row['Estimasi_Biaya_Lembur_Rp']:,.0f}", 1, 1, "R")
+
+    pdf.set_font("Helvetica", "B", 8)
+    pdf.cell(135, 6, "TOTAL BIAYA LEMBUR LINI PER SHIFT", 1, 0, "R")
+    pdf.cell(55, 6, f"Rp {biaya_lembur:,.0f}", 1, 1, "R")
+
+  pdf.ln(10)
+  pdf.set_font("Helvetica", "I", 8)
+  pdf.cell(
+      0,
+      5,
+      "* Laporan ini digenerate secara otomatis oleh Sistem Pendukung Keputusan"
+      " Berbasis Streamlit.",
+      0,
+      1,
+      "R",
+  )
 
   return bytes(pdf.output())
 
@@ -516,11 +620,11 @@ with tab5:
         f"⚠️ **REKOMENDASI 2: PERLU PENAMBAHAN TENAGA KERJA ({selisih_staff}"
         " ORANG) ATAU SKEMA LEMBUR**"
     )
-    st.write(f"""
+    st.writef"""
         * **Keputusan:** Meskipun telah dilakukan redistribusi pada Page 3, masih terdapat operator yang mengalami *Overload* karena total beban kerja lini melampaui jam kerja efektif.
         * **Tindakan Jangka Panjang:** Rekrut **{selisih_staff} orang operator baru** untuk menyeimbangkan kapasitas lini secara permanen.
         * **Tindakan Jangka Pendek:** Berlakukan skema **jam kerja lembur (*overtime*)** dengan estimasi biaya di bawah ini:
-        """)
+        """
 
     st.markdown(
         "### ⏱️ Rincian Kebutuhan Jam Lembur & Estimasi Biaya (per Shift)"
@@ -631,12 +735,33 @@ with tab5:
 
   # 2. TOMBOL DOWNLOAD PDF
   with col_exp2:
+    # Ambil data lembur jika ada untuk tabel section D PDF
+    df_lembur_pdf = (
+        df_final[df_final["Kategori_WLA"] == "Overload"].copy()
+        if sisa_over > 0
+        else pd.DataFrame()
+    )
+    if not df_lembur_pdf.empty:
+      df_lembur_pdf["Kelebihan_Menit"] = (
+          df_lembur_pdf["Total_Waktu_Kerja_Menit"] - jam_kerja_efektif
+      )
+      df_lembur_pdf["Kebutuhan_Lembur_Jam"] = (
+          df_lembur_pdf["Kelebihan_Menit"] / 60.0
+      )
+      df_lembur_pdf["Estimasi_Biaya_Lembur_Rp"] = (
+          df_lembur_pdf["Kebutuhan_Lembur_Jam"] * tarif_lembur_per_jam
+      )
+
     pdf_bytes = generate_pdf_report(
         status_rekomendasi,
         staff_eksisting,
         staff_optimal,
         total_biaya_lembur,
         df_final,
+        jam_kerja_shift,
+        waktu_istirahat,
+        jam_kerja_efektif,
+        df_lembur_pdf,
     )
 
     st.download_button(
