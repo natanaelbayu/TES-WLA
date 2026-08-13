@@ -27,7 +27,7 @@ st.caption(
 
 
 # ==========================================
-# 2. FUNGSI GENERATOR LAPORAN PDF LENGKAP & RAPI
+# 2. FUNGSI GENERATOR LAPORAN PDF LENGKAP & AMAN UNICODE
 # ==========================================
 def generate_pdf_report(
     status_rek,
@@ -77,12 +77,12 @@ def generate_pdf_report(
   pdf.set_font("Helvetica", "B", 10)
   pdf.cell(0, 6, "A. PARAMETER OPERASIONAL LINI", ln=True)
   pdf.set_font("Helvetica", "", 9)
-  pdf.cell(95, 5, f"• Jam Kerja Per Shift : {jam_shift} Jam", ln=False)
-  pdf.cell(95, 5, f"• Waktu Istirahat : {waktu_ist} Menit", ln=True)
+  pdf.cell(95, 5, f"- Jam Kerja Per Shift : {jam_shift} Jam", ln=False)
+  pdf.cell(95, 5, f"- Waktu Istirahat : {waktu_ist} Menit", ln=True)
   pdf.cell(
       95,
       5,
-      f"• Jam Kerja Efektif Tersedia : {jam_efektif:.1f} Menit/Shift",
+      f"- Jam Kerja Efektif Tersedia : {jam_efektif:.1f} Menit/Shift",
       ln=True,
   )
   pdf.ln(4)
@@ -98,9 +98,9 @@ def generate_pdf_report(
   )
   pdf.ln(2)
 
-  pdf.cell(95, 5, f"• Total Operator Eksisting : {staff_eksis} Orang", ln=False)
+  pdf.cell(95, 5, f"- Total Operator Eksisting : {staff_eksis} Orang", ln=False)
   pdf.cell(
-      95, 5, f"• Kebutuhan Operator Optimal : {staff_opt} Orang", ln=True
+      95, 5, f"- Kebutuhan Operator Optimal : {staff_opt} Orang", ln=True
   )
 
   selisih = staff_opt - staff_eksis
@@ -108,21 +108,21 @@ def generate_pdf_report(
     pdf.cell(
         95,
         5,
-        f"• Kekurangan Tenaga Kerja : {selisih} Orang (Understaffed)",
+        f"- Kekurangan Tenaga Kerja : {selisih} Orang (Understaffed)",
         ln=True,
     )
   elif selisih < 0:
     pdf.cell(
         95,
         5,
-        f"• Kelebihan Tenaga Kerja : {abs(selisih)} Orang (Overstaffed)",
+        f"- Kelebihan Tenaga Kerja : {abs(selisih)} Orang (Overstaffed)",
         ln=True,
     )
   else:
     pdf.cell(
         95,
         5,
-        "• Status Kapasitas Lini : Cukup / Optimal (Balanced)",
+        "- Status Kapasitas Lini : Cukup / Optimal (Balanced)",
         ln=True,
     )
   pdf.ln(4)
@@ -146,11 +146,19 @@ def generate_pdf_report(
 
   pdf.set_font("Helvetica", "", 8)
   for idx, row in df_final.iterrows():
+    # Bersihkan karakter emoji dari teks Fatigue Risk agar tidak memicu error Unicode
+    clean_fatigue = (
+        str(row["Fatigue_Risk"])
+        .replace("🟢 ", "")
+        .replace("🟡 ", "")
+        .replace("🔴 ", "")
+    )
+
     pdf.cell(30, 6, str(row["Operator"]), 1, 0, "C")
     pdf.cell(35, 6, f"{row['Total_Waktu_Kerja_Menit']:.1f}", 1, 0, "C")
     pdf.cell(30, 6, f"{row['Percent_WLA']:.1f}%", 1, 0, "C")
     pdf.cell(35, 6, str(row["Kategori_WLA"]), 1, 0, "C")
-    pdf.cell(60, 6, str(row["Fatigue_Risk"]), 1, 1, "L")
+    pdf.cell(60, 6, clean_fatigue, 1, 1, "L")
 
   pdf.ln(4)
 
@@ -735,7 +743,6 @@ with tab5:
 
   # 2. TOMBOL DOWNLOAD PDF
   with col_exp2:
-    # Ambil data lembur jika ada untuk tabel section D PDF
     df_lembur_pdf = (
         df_final[df_final["Kategori_WLA"] == "Overload"].copy()
         if sisa_over > 0
